@@ -1,0 +1,7 @@
+{
+  "name": "quitter-strip",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
