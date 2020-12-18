@@ -6,6 +6,7 @@
       </ion-button>
     </template>
     <book-list :books="books"></book-list>
+    <button @click="loadBooks">Refresh</button>
   </base-layout>
 </template>
 
@@ -19,10 +20,18 @@ export default {
   data() {
     return { add };
   },
+  created() {
+    this.$store.dispatch("loadBooks");
+  },
   computed: {
     books() {
       return this.$store.getters.books;
     },
+  },
+  methods: {
+    loadBooks() {
+      this.$store.dispatch("loadBooks");
+    }
   },
   components: {
     IonButton,

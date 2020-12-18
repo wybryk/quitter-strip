@@ -1,14 +1,17 @@
 import { createStore } from "vuex";
+import Storage from "./storage";
 
+const storage = new Storage();
 const store = createStore({
   state() {
     return {
       books: [
         {
           id: 1,
-          title: "Book title",
-          author: "Author name",
-          description: "description",
+          title: "Pan lodowego ogrodu t.1",
+          author: "Jarosław Grzędowicz",
+          description:
+            "Vuko Drakkainen samotnie rusza na ratunek ekspedycji naukowej badającej człekopodobną cywilizację planety Midgaard. Pod żadnym pozorem nie może ingerować w rozwój nieznanej kultury. Trafia na zły czas. Planeta powitała go mgłą i śmiercią. Dalej jest tylko gorzej. Trwa wojna bogów. Giną śmiertelnicy. Odwieczne reguły zostały złamane.",
           state: "BORROWED",
           creationDate: "2018-01-01T09:47:03Z",
           states: [
@@ -33,9 +36,10 @@ const store = createStore({
         },
         {
           id: 2,
-          title: "Book title 2",
-          author: "Author name 2",
-          description: "description 2",
+          title: "Diabeł Łańcucki",
+          author: "Jacek Komuda",
+          description:
+            "Jacek Komuda zawarł pakt z diabłem... Diabłem Łańcuckim. Wyjąwszy go z kart XVII-wiecznej historii Ziemi Przemyskiej, dopisał brakujący rozdział mroczno-awanturniczej legendy Bieszczadów i Podkarpacia.",
           state: "READED",
           creationDate: "2020-06-01T09:47:03Z",
           states: [
@@ -85,11 +89,12 @@ const store = createStore({
     },
   },
   actions: {
-    /*  loadBooks: ({commit}) => {
-      commit('setBooks', );
-    }, */
-    addBook: ({ commit }, book) => {
+    loadBooks: ({ commit }) => {
+      commit("setBooks", storage.getBooks());
+    },
+    addBook: ({ commit, getters }, book) => {
       commit("addBook", book);
+      storage.addBook(getters.books);
     },
     updateBook: ({ commit }, book) => {
       commit("updateBook", book);
@@ -100,7 +105,6 @@ const store = createStore({
   },
   getters: {
     books: (state) => state.books,
-    bookoo: (state, bookId) => state.books.find((book) => book.id === bookId),
     book(state) {
       return (bookId) => {
         return state.books.find((book) => book.id == bookId);
