@@ -1,30 +1,54 @@
 <template>
   <ion-grid>
     <ion-row>
-      <ion-label>{{ book.author }}</ion-label>
+      <ion-label>
+        <p>Author</p>
+        <h2>{{ book.author }}</h2>
+      </ion-label>
     </ion-row>
     <ion-row>
-      <ion-label>{{ book.state }}</ion-label>
+      <ion-label>
+        <p>Creation date</p>
+        <h2>{{ book.creationDate }}</h2>
+        </ion-label>
     </ion-row>
     <ion-row>
-      <ion-label v-if="book.description">{{ book.description }}</ion-label>
+      <ion-label>
+        <p>State</p>
+        <h2>{{ book.state }}</h2>
+      </ion-label>
     </ion-row>
     <ion-row>
-      <ion-label>details</ion-label>
+      <ion-label v-if="book.description">
+        <p>Description</p>
+        <h2>{{ book.description }}</h2>
+      </ion-label>
     </ion-row>
+    <ion-list>
+      <ion-list-header>History</ion-list-header>
+      <ion-item v-for="state in book.states" :key="state.creationDate">
+        <ion-label>
+          <h3>{{state.name}}</h3>
+          <h3>{{state.creationDate}}</h3>
+          <h3 v-if="state.endDate">{{state.endDate}}</h3>
+        </ion-label>
+      </ion-item>
+    </ion-list>
   </ion-grid>
 </template>
 
 <script>
-import { IonGrid, IonRow, /* IonCol, */ IonLabel } from "@ionic/vue";
+import { IonGrid, IonRow, IonLabel, IonList, IonListHeader, IonItem } from "@ionic/vue";
 
 export default {
   props: ["book"],
   components: {
     IonGrid,
     IonRow,
-    // IonCol,
     IonLabel,
+    IonList,
+    IonListHeader,
+    IonItem
   },
 };
 </script>
