@@ -1,57 +1,16 @@
 import { createStore } from "vuex";
+import firebase from "firebase/app";
+import "firebase/firestore";
+import FIREBASE_CONFIG from "./.env.firebase";
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(FIREBASE_CONFIG);
+}
 
 const store = createStore({
   state() {
     return {
-      books: [
-        {
-          id: 1,
-          title: "Book title",
-          author: "Author name",
-          description: "description",
-          state: "BORROWED",
-          creationDate: "2018-01-01T09:47:03Z",
-          states: [
-            {
-              creationDate: "2020-06-05T09:47:03Z",
-              endDate: "2020-06-06T17:12:58Z",
-              name: "WANTED_TO_READ",
-            },
-            {
-              creationDate: "2020-06-06T18:47:03Z",
-              endDate: "2020-07-01T18:47:03Z",
-              name: "BORROWED",
-              personName: "Name of person",
-            },
-            {
-              creationDate: "2020-08-06T06:47:03Z",
-              endDate: "",
-              name: "BORROWED",
-              personName: "Name of person 2",
-            },
-          ],
-        },
-        {
-          id: 2,
-          title: "Book title 2",
-          author: "Author name 2",
-          description: "description 2",
-          state: "READED",
-          creationDate: "2020-06-01T09:47:03Z",
-          states: [
-            {
-              creationDate: "2020-06-05T09:47:03Z",
-              endDate: "2020-06-06T17:12:58Z",
-              name: "WANTED_TO_READ",
-            },
-            {
-              creationDate: "2021-06-05T09:47:03Z",
-              endDate: "",
-              name: "READED",
-            },
-          ],
-        },
-      ],
+      books: [],
       bookStates: [
         "IN_LIBRARY",
         "WANTED_TO_READ",
@@ -64,7 +23,6 @@ const store = createStore({
   },
   mutations: {
     setBooks(state, books) {
-      console.log(books);
       state.books = books;
     },
     addBook(state, book) {
@@ -85,11 +43,34 @@ const store = createStore({
     },
   },
   actions: {
-    /*  loadBooks: ({commit}) => {
-      commit('setBooks', );
-    }, */
+    loadBooks: ({ commit }) => {
+      firebase
+        .firestore()
+        .collection("books")
+        .get()
+        .then((response) => {
+          let books = [];
+          response.forEach((value) => {
+            books.push(Object.assign({ id: value.id }, value.data()));
+          });
+          commit("setBooks", books);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
     addBook: ({ commit }, book) => {
       commit("addBook", book);
+      firebase
+        .firestore()
+        .collection("books")
+        .add(book)
+        .then((value) => {
+          console.log(value);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
     updateBook: ({ commit }, book) => {
       commit("updateBook", book);
@@ -99,8 +80,9 @@ const store = createStore({
     },
   },
   getters: {
-    books: (state) => state.books,
-    bookoo: (state, bookId) => state.books.find((book) => book.id === bookId),
+    books(state) {
+      return state.books;
+    },
     book(state) {
       return (bookId) => {
         return state.books.find((book) => book.id == bookId);

@@ -9,7 +9,7 @@
     <ion-row>
       <ion-label>
         <p>Creation date</p>
-        <h2>{{ book.creationDate }}</h2>
+        <h2>{{ $filters.toDate(book.creationDate) }}</h2>
         </ion-label>
     </ion-row>
     <ion-row>
@@ -29,8 +29,8 @@
       <ion-item v-for="state in book.states" :key="state.creationDate">
         <ion-label>
           <h3>{{state.name}}</h3>
-          <h3>{{state.creationDate}}</h3>
-          <h3 v-if="state.endDate">{{state.endDate}}</h3>
+          <h3>{{$filters.toDate(state.creationDate)}}</h3>
+          <h3 v-if="state.endDate">{{$filters.toDate(state.endDate)}}</h3>
         </ion-label>
       </ion-item>
     </ion-list>

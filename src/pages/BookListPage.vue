@@ -19,6 +19,9 @@ export default {
   data() {
     return { add };
   },
+  created() {
+    this.$store.dispatch("loadBooks");
+  },
   computed: {
     books() {
       return this.$store.getters.books;

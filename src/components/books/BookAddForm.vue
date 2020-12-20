@@ -68,7 +68,6 @@ export default {
   methods: {
     submitForm() {
       const creationDate = new Date().toISOString();
-      this.book.id = creationDate;
       this.book.creationDate = creationDate;
       this.book.states = {
         creationDate: creationDate,

@@ -8,7 +8,7 @@
     </ion-label>
     <ion-label>
       <p>Creation date</p>
-      <h2>{{ book.creationDate }}</h2>
+      <h2>{{ $filters.toDate(book.creationDate) }}</h2>
       <p>State</p>
       <h2>{{ book.state }}</h2>
     </ion-label>

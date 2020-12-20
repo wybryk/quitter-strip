@@ -32,6 +32,23 @@ const app = createApp(App)
 
 app.component("base-layout", BaseLayout);
 
+app.config.globalProperties.$filters = {
+  toDate(value) {
+    if (!value) {
+      return "";
+    }
+    const date = new Date(value.seconds * 1000);
+    return `${date.getFullYear()}-${this.formatNumber(date.getMonth() + 1)}-${this.formatNumber(date.getDate())} ${this.formatNumber(date.getHours())}:${this.formatNumber(date.getMinutes())}:${this.formatNumber(date.getSeconds())}`;
+  },
+  formatNumber(value) {
+    if (!value) {
+      return "";
+    }
+
+    return value >= 10 ? value : `0${value}`;
+  }
+};
+
 router.isReady().then(() => {
   app.mount("#app");
 });
